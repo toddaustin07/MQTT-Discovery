@@ -26,7 +26,7 @@ Once available on your hub, from the Smartthings mobile app, do an Add Device / 
 
 Open the MQTT Discovery device and go into device settings *Settings* and configure the MQTT broker IP address (IP only, no port; secure connections or authorization not yet supported).
 
-After saving the broker IP address, return to the device Controls screen and tap the Refresh button. The driver will now connect to broker and subscribe to the ‘smartthings/#’ MQTT topic
+After saving the broker IP address, return to the device Controls screen and tap the Refresh button. The driver will now connect to the MQTT broker and subscribe to the ‘smartthings/#’ MQTT topic.
 
 ### Sending MQTT Messages
 
