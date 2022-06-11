@@ -61,6 +61,7 @@ Note that the message content is unimportant, and Retain option is optional (unl
 ##### Update state of the switch
 
 mosquitto_pub -h localhost -t “smartthings/switch/myswitch/state” -m “on”
+
 mosquitto_pub -h localhost -t “smartthings/switch/myswitch/state” -m “off”
 
 The message value must be one of the valid values that SmartThings expects for the specific device capability:
