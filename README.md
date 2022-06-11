@@ -63,3 +63,8 @@ Note that the message content is unimportant, and Retain option is optional (unl
 mosquitto_pub -h localhost -t “smartthings/switch/myswitch/state” -m “on”
 mosquitto_pub -h localhost -t “smartthings/switch/myswitch/state” -m “off”
 
+The message value must be one of the valid values that SmartThings expects for the specific device capability:
+- switch, light, plug: on | off
+- momentary: pushed | held | double | pushed_x2 | pushed_x3
+- motion (motionSensor): active | inactive
+- presence (presenceSensor): present | not present
