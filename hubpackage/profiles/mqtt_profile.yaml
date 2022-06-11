@@ -1,0 +1,21 @@
+name: mqttconfig.v1
+components:
+- id: main
+  capabilities:
+    - id: partyvoice23922.status
+      version: 1
+    - id: partyvoice23922.refresh
+      version: 1
+  categories:
+    - name: Others
+preferences:
+  - title: "MQTT Broker"
+    name: broker
+    description: "Broker IP Address"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 10
+      maxLength: 15
+      default: "192.168.1.xxx"

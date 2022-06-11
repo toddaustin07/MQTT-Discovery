@@ -1,0 +1,23 @@
+name: mqttmomentary.v1
+components:
+- id: main
+  capabilities:
+    - id: momentary
+      version: 1
+    - id: button
+      version: 1
+  categories:
+    - name: RemoteController
+metadata:
+  ocfDeviceType: x.com.st.d.remotecontroller
+preferences:
+  - title: "Command Topic"
+    name: cmdTopic
+    description: "Topic String"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 6
+      maxLength: 32
+      default: "xxxxx/xxxxx"

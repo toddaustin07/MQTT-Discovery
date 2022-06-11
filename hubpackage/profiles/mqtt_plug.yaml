@@ -1,0 +1,21 @@
+name: mqttplug.v1
+components:
+- id: main
+  capabilities:
+    - id: switch
+      version: 1
+  categories:
+    - name: SmartPlug
+metadata:
+  ocfDeviceType: oic.d.smartplug
+preferences:
+  - title: "Command Topic"
+    name: cmdTopic
+    description: "Topic String"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 6
+      maxLength: 32
+      default: "xxxxx/xxxxx"

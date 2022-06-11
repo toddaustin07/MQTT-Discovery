@@ -1,0 +1,5 @@
+name: 'MQTT Handler V1'
+packageKey: 'MQTThandlerV1'
+permissions:
+    lan: {}
+    discovery: {}
