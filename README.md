@@ -4,7 +4,7 @@ A SmartThings Edge version of Home Assistant's MQTT Discovery feature
 This driver is provides a general-purpose way to create and update basic SmartThings devices via MQTT messages. These messages can be initiated through configurable MQTT-enabled applications, or custom applications or scripts running on your home network. It is easy to set up, and requires no programming expertise to implement.
 
 ### Caveats
-- Supports device types: switch, momentary, light, plug, motion, presence (more to be added)
+- Supports device types: switch, momentary, light, plug, motion, contact, presence (more to be added)
 - Limited testing, and only with Mosquitto MQTT broker
 - Secure connections and authorization with broker not yet supported
 
@@ -68,4 +68,5 @@ The message value must be one of the valid values that SmartThings expects for t
 - switch, light, plug (switch): on | off
 - momentary: pushed | held | double | pushed_x2 | pushed_x3
 - motion (motionSensor): active | inactive
+- contact (contactSensor): open | closed
 - presence (presenceSensor): present | not present
