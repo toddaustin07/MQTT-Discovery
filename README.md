@@ -44,9 +44,11 @@ where:
 - *uniquename* is a unique identifying name for the device; \[a-zA-Z0-9_\]; no other special characters or spaces
 - ‘**config**’ indicates device creation, ‘**state**’ indicates device capability attribute update
 
-#### Sending commands back to MQTT from SmartThings
+#### Sending commands back to MQTT from the SmartThings device
 
 SmartThings MQTT devices created by this driver can be configured to publish capability commands **TO** a chosen MQTT topic. This is configured in device Settings.  Also configurable on a device-by-device basis is QoS and Retention options. Note that this is functional only for the devices containing switches (switch, plug, light) at the moment.
+
+If you have the need for other SmartThings devices to send MQTT messages, check out my [MQTT SmartApp](https://github.com/toddaustin07/MQTT_SmartApp).
 
 #### Switch example
 
