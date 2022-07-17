@@ -44,9 +44,13 @@ where:
 - *uniquename* is a unique identifying name for the device; \[a-zA-Z0-9_\]; no other special characters or spaces
 - ‘**config**’ indicates device creation, ‘**state**’ indicates device capability attribute update
 
-#### Sending commands back to MQTT from the SmartThings device
+#### Sending updates back to MQTT from the SmartThings device
 
-SmartThings MQTT devices *created by this driver* can be configured to publish SmartThings-initiated state changes (i.e. switch on/off) **TO** a configured MQTT topic. This is configured in device Settings.  Also configurable on a device-by-device basis are QoS and Retention options. Note that, for now, this is functional only for the MQTT-created devices containing switches (switch, plug, light).
+SmartThings MQTT devices *created by this driver* can be configured to publish SmartThings-initiated state changes (i.e. switch on/off) **TO** a configured MQTT topic. This is configured in device Settings.  It is highly recommended to use a top-level topic *other* than 'smartthings' to avoid feedback loops!
+
+Also configurable on a device-by-device basis are QoS and Retention options. 
+
+Note that, for now, sending updates back to MQTT is functional only for the MQTT-created devices containing **switches** (switch, plug, light).
 
 *If you have the need for other SmartThings devices to publish MQTT messages, check out my [MQTT SmartApp](https://github.com/toddaustin07/MQTT_SmartApp).*
 
