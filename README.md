@@ -6,7 +6,7 @@ This driver is provides a general-purpose way to create and update basic SmartTh
 ### Caveats
 - Supports device types: switch, momentary, light, plug, motion, contact, presence (more to be added)
 - Limited testing, and only with Mosquitto MQTT broker
-- Secure connections and authorization with broker not yet supported
+- Unsecure connections only (http, not https)
 
 ## Instructions
 
@@ -24,9 +24,9 @@ Enroll your hub and then from the available drivers list, install **MQTT Handler
 
 Once available on your hub, from the Smartthings mobile app, do an Add Device / Scan nearby devices, and a new device called **MQTT Discovery** will be created in the *No room assigned* room.
 
-Open the MQTT Discovery device and go into device *Settings* and configure the MQTT broker IP address (IP only, no port; secure connections or authorization not yet supported).
+Open the MQTT Discovery device and go into device *Settings* and configure the MQTT broker IP address (IP only, no port), authorization username & pw (if required), and desired Quality of Service (QoS).
 
-After saving the broker IP address, return to the device Controls screen and tap the Refresh button. The driver will now connect to the MQTT broker and subscribe to the ‘smartthings/#’ MQTT topic.
+After saving the device Settings, return to the device Controls screen and tap the Refresh button. The driver will now connect to the MQTT broker and subscribe to the ‘smartthings/#’ MQTT topic.
 
 ### Sending MQTT Messages
 
@@ -44,9 +44,9 @@ where:
 - *uniquename* is a unique identifying name for the device; \[a-zA-Z0-9_\]; no other special characters or spaces
 - ‘**config**’ indicates device creation, ‘**state**’ indicates device capability attribute update
 
-#### Sending commands back to the device from SmartThings
+#### Sending commands back to MQTT from SmartThings
 
-SmartThings MQTT devices created by this driver can be configured to publish capability commands **TO** a chosen MQTT topic. This is configured in device Settings. Note that this is implemented only for the devices containing switches (switch, plug, light) at the moment.
+SmartThings MQTT devices created by this driver can be configured to publish capability commands **TO** a chosen MQTT topic. This is configured in device Settings.  Also configurable on a device-by-device basis is QoS and Retention options. Note that this is functional only for the devices containing switches (switch, plug, light) at the moment.
 
 #### Switch example
 
@@ -56,7 +56,7 @@ Use an app like mosquitto_pub to issue the following examples.
 
 mosquitto_pub -h localhost -t “smartthings/switch/myswitch/config” -m “create it!”
 
-Note that the message content is unimportant, and Retain option is optional (unlike HA)
+Note that the message content is unimportant, and Retain option should *not* be used (unlike HA)
 
 ##### Update state of the switch
 
