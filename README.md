@@ -46,9 +46,9 @@ where:
 
 #### Sending commands back to MQTT from the SmartThings device
 
-SmartThings MQTT devices *created by this driver* can be configured to publish capability commands (i.e. switch on/off) **TO** a configured MQTT topic. This is configured in device Settings.  Also configurable on a device-by-device basis is QoS and Retention options. Note that, for now, this is functional only for the devices containing switches (switch, plug, light).
+SmartThings MQTT devices *created by this driver* can be configured to publish SmartThings-initiated state changes (i.e. switch on/off) **TO** a configured MQTT topic. This is configured in device Settings.  Also configurable on a device-by-device basis are QoS and Retention options. Note that, for now, this is functional only for the MQTT-created devices containing switches (switch, plug, light).
 
-If you have the need for other SmartThings devices to publish MQTT messages, check out my [MQTT SmartApp](https://github.com/toddaustin07/MQTT_SmartApp).
+*If you have the need for other SmartThings devices to publish MQTT messages, check out my [MQTT SmartApp](https://github.com/toddaustin07/MQTT_SmartApp).*
 
 #### Switch example
 
