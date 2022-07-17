@@ -8,12 +8,12 @@ This driver is provides a general-purpose way to create and update basic SmartTh
 - Limited testing, and only with Mosquitto MQTT broker
 - Unsecure connections only (http, not https)
 
-## Instructions
-
 ### Pre-requisites
 - SmartThings Edge enabled hub
 - SmartThings ID
 - MQTT broker running on your LAN (e.g. Mosquitto)
+
+## Instructions
 
 ### Getting the SmartThings Driver
 The driver is available through my test channel:  https://bestow-regional.api.smartthings.com/invite/Q1jP7BqnNNlL
@@ -46,9 +46,9 @@ where:
 
 #### Sending commands back to MQTT from the SmartThings device
 
-SmartThings MQTT devices created by this driver can be configured to publish capability commands **TO** a chosen MQTT topic. This is configured in device Settings.  Also configurable on a device-by-device basis is QoS and Retention options. Note that this is functional only for the devices containing switches (switch, plug, light) at the moment.
+SmartThings MQTT devices *created by this driver* can be configured to publish capability commands (i.e. switch on/off) **TO** a configured MQTT topic. This is configured in device Settings.  Also configurable on a device-by-device basis is QoS and Retention options. Note that, for now, this is functional only for the devices containing switches (switch, plug, light).
 
-If you have the need for other SmartThings devices to send MQTT messages, check out my [MQTT SmartApp](https://github.com/toddaustin07/MQTT_SmartApp).
+If you have the need for other SmartThings devices to publish MQTT messages, check out my [MQTT SmartApp](https://github.com/toddaustin07/MQTT_SmartApp).
 
 #### Switch example
 
