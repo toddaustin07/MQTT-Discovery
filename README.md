@@ -39,7 +39,7 @@ SmartThings device creation and capability attribute (state) updates are achieve
 where:
 
 - ‘**smartthings**’ is mandatory topic prefix
-- *type* is device type (currently: switch | light | plug | momentary | motion | presence)
+- *type* is device type (currently: switch | light | plug | momentary | motion | contact | presence)
 - *nodename* is an optional name identifying the source node \[a-zA-Z0-9_\]; no other special characters or spaces
 - *uniquename* is a unique identifying name for the device; \[a-zA-Z0-9_\]; no other special characters or spaces
 - ‘**config**’ indicates device creation, ‘**state**’ indicates device capability attribute update
