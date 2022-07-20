@@ -54,8 +54,6 @@ SmartThings MQTT devices *created by this driver* can be configured to publish S
 
 Also configurable on a device-by-device basis are QoS and Retention options. 
 
-Note that, for now, sending updates back to MQTT is functional only for the MQTT-created devices containing **switches** (switch, plug, light).
-
 *If you have the need for other SmartThings devices to publish MQTT messages, check out my [MQTT SmartApp](https://github.com/toddaustin07/MQTT_SmartApp).*
 
 #### Switch example
