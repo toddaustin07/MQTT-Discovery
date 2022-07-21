@@ -1,0 +1,10 @@
+name: mqtttemp.v1
+components:
+- id: main
+  capabilities:
+    - id: temperatureMeasurement
+      version: 1
+  categories:
+    - name: Thermostat
+metadata:
+  ocfDeviceType: oic.d.thermostat

@@ -8,14 +8,3 @@ components:
     - name: MotionSensor
 metadata:
   ocfDeviceType: x.com.st.d.sensor.motion
-preferences:
-  - title: "Command Topic"
-    name: cmdTopic
-    description: "Topic String"
-    required: true
-    preferenceType: string
-    definition:
-      stringType: text
-      minLength: 6
-      maxLength: 32
-      default: "xxxxx/xxxxx"

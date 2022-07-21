@@ -9,13 +9,44 @@ components:
   categories:
     - name: Others
 preferences:
-  - title: "MQTT Broker"
+  - title: "MQTT Broker Address"
     name: broker
-    description: "Broker IP Address"
+    description: "IP Address"
     required: true
     preferenceType: string
     definition:
       stringType: text
-      minLength: 10
+      minLength: 7
       maxLength: 15
       default: "192.168.1.xxx"
+  - title: "MQTT Broker Username"
+    name: userid
+    description: "Authentication Username"
+    required: false
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 3
+      maxLength: 32
+      default: "xxxxx"
+  - title: "MQTT Broker Password"
+    name: password
+    description: "Authentication PW"
+    required: false
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 3
+      maxLength: 32
+      default: "xxxxx"
+  - title: "Subscriptions QoS"
+    name: subqos
+    description: "Quality of Service"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        qos0: "0"
+        qos1: "1"
+        qos2: "2"
+      default: qos1

@@ -598,6 +598,12 @@ function client_mt:disconnect(rc, properties, user_properties)
 
 	-- now close connection
 	self:close_connection("connection closed by client")
+	
+	-- Cancel Keep-Alive routine timer *****
+	if self.keepalive_timer then
+		args.st_driver:cancel_timer(self.keepalive_timer)		
+		self.keepalive_timer = nil
+	end
 
 	return true
 end

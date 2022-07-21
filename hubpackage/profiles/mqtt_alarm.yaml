@@ -1,13 +1,13 @@
-name: mqttlight.v1
+name: mqttalarm.v1
 components:
 - id: main
   capabilities:
-    - id: switch
+    - id: alarm
       version: 1
   categories:
-    - name: Light
+    - name: Siren
 metadata:
-  ocfDeviceType: oic.d.light
+  ocfDeviceType: x.com.st.d.siren
 preferences:
   - title: "Command Topic"
     name: cmdTopic
@@ -36,4 +36,4 @@ preferences:
     required: true
     preferenceType: boolean
     definition:
-      default: false
+     default: false

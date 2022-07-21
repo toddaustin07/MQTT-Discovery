@@ -1,13 +1,13 @@
-name: mqttlight.v1
+name: mqttvalve.v1
 components:
 - id: main
   capabilities:
-    - id: switch
+    - id: valve
       version: 1
   categories:
-    - name: Light
+    - name: WaterValve
 metadata:
-  ocfDeviceType: oic.d.light
+  ocfDeviceType: oic.d.watervalve
 preferences:
   - title: "Command Topic"
     name: cmdTopic
@@ -36,4 +36,4 @@ preferences:
     required: true
     preferenceType: boolean
     definition:
-      default: false
+     default: false

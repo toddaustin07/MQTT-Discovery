@@ -1,13 +1,13 @@
-name: mqttlight.v1
+name: mqttlevel.v1
 components:
 - id: main
   capabilities:
-    - id: switch
+    - id: switchLevel
       version: 1
   categories:
-    - name: Light
+    - name: Switch
 metadata:
-  ocfDeviceType: oic.d.light
+  ocfDeviceType: oic.d.switch
 preferences:
   - title: "Command Topic"
     name: cmdTopic
@@ -36,4 +36,4 @@ preferences:
     required: true
     preferenceType: boolean
     definition:
-      default: false
+     default: false

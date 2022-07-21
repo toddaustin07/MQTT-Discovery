@@ -64,13 +64,25 @@ end
 
 
 local profiles =  {
-                    ['mqttdisco'] = 'mqttconfig.v1',
-                    ['switch'] = 'mqttswitch.v1',
-                    ['momentary'] = 'mqttmomentary.v1',
-                    ['motion'] = 'mqttmotion.v1',
-                    ['presence'] = 'mqttpresence.v1',
-                    ['plug'] = 'mqttplug.v1',
-                    ['light'] = 'mqttlight.v1',
+                    ['mqttdisco']      = 'mqttconfig.v1',
+                    ['switch']         = 'mqttswitch.v1',
+                    ['plug']           = 'mqttplug.v1',
+                    ['light']          = 'mqttlight.v1',
+                    ['momentary']      = 'mqttmomentary.v1',
+                    ['button']         = 'mqttmomentary.v1',
+                    ['motion']         = 'mqttmotion.v1',
+                    ['motionSensor']   = 'mqttmotion.v1',
+                    ['presence']       = 'mqttpresence.v1',
+                    ['presenceSensor'] = 'mqttpresence.v1',
+                    ['contact']        = 'mqttcontact.v1',
+                    ['contactSensor']  = 'mqttcontact.v1',
+                    ['temperature']    = 'mqtttemp.v1',
+                    ['temperatureMeasurement']    = 'mqtttemp.v1',
+                    ['alarm']          = 'mqttalarm.v1',
+                    ['switchLevel']    = 'mqttlevel.v1',
+                    ['level']          = 'mqttlevel.v1',
+                    ['dimmer']         = 'mqttlevel.v1',
+                    ['valve']          = 'mqttvalve.v1',
                   }
 
 
@@ -122,6 +134,26 @@ local function proc_config(topic, msg)
 end
 
 
+local function validate_state(capattr, statevalue)
+
+  for key, value in pairs(capattr) do
+    if type(value) == 'table' then
+      for key2, value2 in pairs(value) do
+        if key2 == 'attribute' then
+          if key == statevalue then
+            return (true)
+          end
+        end
+      end
+    end
+  end
+  
+  log.warn (string.format('Invalid state value [%s] received for %s', statevalue, capattr.NAME))
+  return false
+
+end
+
+
 local function proc_state(topic, state)
 
   local device = determine_device(topic)
@@ -132,20 +164,68 @@ local function proc_state(topic, state)
 
     if topic.cap == 'switch' or topic.cap == 'plug' or topic.cap == 'light' then
     
-      device:emit_event(capabilities.switch.switch(state))
+      if validate_state(capabilities.switch.switch, state) then
+        device:emit_event(capabilities.switch.switch(state))
+      end
     
-    elseif topic.cap == 'momentary' then
+    elseif topic.cap == 'motion' or topic.cap == 'motionSensor' then
     
-      device:emit_event(capabilities.button.button[state]({state_change = true}))
+      if validate_state(capabilities.motionSensor.motion, state) then
+        device:emit_event(capabilities.motionSensor.motion(state))
+      end
     
-    elseif topic.cap == 'motion' then
+    elseif topic.cap == 'presence' or topic.cap == 'presenceSensor' then
     
-      device:emit_event(capabilities.motionSensor.motion(state))
+      if validate_state(capabilities.presenceSensor.presence, state) then
+        device:emit_event(capabilities.presenceSensor.presence(state))
+      end
     
-    elseif topic.cap == 'presence' then
+    elseif topic.cap == 'contact' or topic.cap == 'contactSensor'then
     
-      device:emit_event(capabilities.presenceSensor.presence(state))
+      if validate_state(capabilities.contactSensor.contact, state) then
+        device:emit_event(capabilities.contactSensor.contact(state))
+      end
     
+    elseif topic.cap == 'momentary' or topic.cap == 'button' then
+    
+      local supported_values =  {
+                                  'pushed',
+                                  'held',
+                                  'double',
+                                  'pushed_2x',
+                                  'pushed_3x'
+                                 }
+
+      for _, val in ipairs(supported_values) do
+        if state == val then
+          device:emit_event(capabilities.button.button[state]({state_change = true}))
+          break
+        end
+      end
+      
+    elseif topic.cap == 'temperature' or topic.cap == 'temperatureMeasurement' then
+    
+      local temp = tonumber(state)
+      if temp then
+        device:emit_event(capabilities.temperatureMeasurement.temperature(temp))
+      end
+    
+    elseif topic.cap == 'alarm' then
+      if validate_state(capabilities.alarm.alarm, state) then
+        device:emit_event(capabilities.alarm.alarm(state))
+      end
+      
+    elseif topic.cap == 'switchLevel' or topic.cap == 'level' or topic.cap == 'dimmer' then
+      local level = tonumber(state)
+      if level then
+        device:emit_event(capabilities.switchLevel.level(level))
+      end
+      
+    elseif topic.cap == 'valve' then
+      if validate_state(capabilities.valve.valve, state) then
+        device:emit_event(capabilities.valve.valve(state))
+      end
+      
     else
       log.warn ('Unsupported capability:', topic.cap)
     end
@@ -194,7 +274,20 @@ end
 local function create_MQTT_client(device)
 
 	-- create mqtt client
-  client = mqtt.client { uri = device.preferences.broker, clean = true, driver = thisDriver, device = device }
+  local connect_args = {}
+  connect_args.uri = device.preferences.broker
+  connect_args.clean = true
+  connect_args.driver = thisDriver
+  connect_args.device = device
+  
+  if device.preferences.userid ~= '' and device.preferences.password ~= '' then
+    if device.preferences.userid ~= 'xxxxx' and device.preferences.password ~= 'xxxxx' then
+      connect_args.username = device.preferences.userid
+      connect_args.password = device.preferences.password
+    end
+  end
+  
+  client = mqtt.client(connect_args)
 
   client:on{
     connect = function(connack)
@@ -205,7 +298,7 @@ local function create_MQTT_client(device)
         device:emit_event(cap_status.status('Connected to Broker'))
         
         -- subscribe to smartthings topic
-        assert(client:subscribe{ topic=SUBSCRIBE_TOPIC, qos=1, callback=function(suback)
+        assert(client:subscribe{ topic=SUBSCRIBE_TOPIC, qos=tonumber(device.preferences.subqos), callback=function(suback)
           log.info("Subscribed to smartthings topic:", suback)
           device:emit_event(cap_status.status('Connected & Subscribed'))
         end})
@@ -235,7 +328,7 @@ local function create_MQTT_client(device)
         end
       
       else
-        log.error ('Invalid topic structure received')
+        log.warn ('Invalid topic structure received')
       end
       
     end,
@@ -290,7 +383,9 @@ local function init_mqtt(device)
 		  local ok, err = mqtt.run_sync(client)
 		  
 		  if ok == false then
+        log.debug ('MQTT run_sync returned error:', err)
 		    if string.lower(err):find('connection refused', 1, 'plaintext') or err == "closed" then
+          log.debug ('client_reset_inprogress=', client_reset_inprogress)
 					if client_reset_inprogress == true then; break; end
 					
 		      local connected = false
@@ -356,11 +451,12 @@ local function send_command(device, cmd)
   if (device.preferences.cmdTopic ~= 'xxxxx/xxxxx') and (device.preferences.cmdTopic ~= nil) then
   
     if client then
-  
+    
       assert(client:publish {
                               topic = device.preferences.cmdTopic,
                               payload = cmd,
-                              qos = 1
+                              qos = tonumber(device.preferences.cmdqos),
+                              retain = device.preferences.retain,
                             })
                             
       log.info ('Command published to', device.preferences.cmdTopic)
@@ -396,6 +492,27 @@ local function handle_switch(driver, device, command)
   
 end
 
+local function handle_level(driver, device, command)
+
+  log.info ('Level set to:', command.args.level)
+  
+  device:emit_event(capabilities.switchLevel.level(command.args.level))
+  
+  send_command(device, tostring(command.args.level))
+  
+end
+
+local function handle_valve(driver, device, command)
+
+  log.info ('Valve command received:', command.command)
+  
+  if command.command == 'close' then
+    device:emit_event(capabilities.valve.valve('closed'))
+  elseif command.command == 'open' then
+    device:emit_event(capabilities.valve.valve('open'))
+  end
+  
+end
 
 ------------------------------------------------------------------------
 --                REQUIRED EDGE DRIVER HANDLERS
@@ -426,19 +543,14 @@ local function device_added (driver, device)
     for _, cap in pairs(caps) do
     
       if cap.id == 'switch' then
-  
         device:emit_event(capabilities.switch.switch('off'))
-        
       elseif cap.id == 'motionSensor' then
-    
         device:emit_event(capabilities.motionSensor.motion('inactive'))
-        
       elseif cap.id == 'presenceSensor' then
-    
         device:emit_event(capabilities.presenceSensor.presence('not present'))
-        
+      elseif cap.id == 'contactSensor' then
+        device:emit_event(capabilities.contactSensor.contact('closed'))
       elseif cap.id == 'momentary' then
-      
         local supported_values =  {
                                     capabilities.button.button.pushed.NAME,
                                     capabilities.button.button.held.NAME,
@@ -447,6 +559,15 @@ local function device_added (driver, device)
                                     capabilities.button.button.pushed_3x.NAME,
                                   }
         device:emit_event(capabilities.button.supportedButtonValues(supported_values))
+        
+      elseif cap.id == 'temperatureMeasurement' then
+        device:emit_event(capabilities.temperatureMeasurement.temperature({value=20, unit='C'}))
+      elseif cap.id == 'alarm' then
+        device:emit_event(capabilities.alarm.alarm('off'))
+      elseif cap.id == 'switchLevel' then
+        device:emit_event(capabilities.switchLevel.level(0))
+      elseif cap.id == 'valve' then
+        device:emit_event(capabilities.valve.valve('closed'))
       end
       
     end
@@ -493,6 +614,24 @@ local function handler_driverchanged(driver, device, event, args)
 end
 
 
+local function shutdown_handler(driver, event)
+
+  log.info ('*** Driver being shut down ***')
+  
+  if client then
+    
+    client:unsubscribe{ topic=SUBSCRIBE_TOPIC, callback=function(unsuback)
+      log.info("\tUnsubscribed from " .. SUBSCRIBE_TOPIC)
+    end}
+    client_reset_inprogress = true
+    client:disconnect()
+    
+    log.info("\tDisconnected from MQTT broker")
+  end
+
+end
+
+
 local function handler_infochanged (driver, device, event, args)
 
   log.debug ('Info changed handler invoked')
@@ -504,6 +643,16 @@ local function handler_infochanged (driver, device, event, args)
       log.info ('Broker URI changed to: ', device.preferences.broker)
     elseif args.old_st_store.preferences.cmdTopic ~= device.preferences.cmdTopic then
       log.info (string.format('Device <%s> command topic changed to: %s', device.label, device.preferences.cmdTopic))
+    elseif args.old_st_store.preferences.userid ~= device.preferences.userid then
+      log.info ('Broker authentication userid changed to: ', device.preferences.userid)
+    elseif args.old_st_store.preferences.password ~= device.preferences.password then
+      log.info ('Broker authentication password changed to: ', device.preferences.password)
+    elseif args.old_st_store.preferences.subqos ~= device.preferences.subqos then
+      log.info ('Subscription QoS changed to: ', device.preferences.subqos)
+    elseif args.old_st_store.preferences.retain ~= device.preferences.retain then
+      log.info ('Retain option changed to: ', device.preferences.retain, type(device.preferences.retain))
+    elseif args.old_st_store.preferences.cmdqos ~= device.preferences.cmdqos then
+      log.info ('Command QoS changed to: ', device.preferences.cmdqos)
     end
 
   end
@@ -537,7 +686,7 @@ thisDriver = Driver("thisDriver", {
     doConfigure = device_doconfigure,
     removed = device_removed
   },
-  
+  driver_lifecycle = shutdown_handler,
   capability_handlers = {
   	[cap_refresh.ID] = {
       [cap_refresh.commands.push.NAME] = handle_refresh,
@@ -546,9 +695,16 @@ thisDriver = Driver("thisDriver", {
       [capabilities.switch.commands.on.NAME] = handle_switch,
       [capabilities.switch.commands.off.NAME] = handle_switch,
     },
+    [capabilities.switchLevel.ID] = {
+      [capabilities.switchLevel.commands.setLevel.NAME] = handle_level,
+    },
+    [capabilities.valve.ID] = {
+      [capabilities.valve.commands.close.NAME] = handle_valve,
+      [capabilities.valve.commands.open.NAME] = handle_valve,
+    },
   }
 })
 
-log.info ('MQTT Device Handler V1 Started!!!')
+log.info ('MQTT Device Handler V1.1 Started!!!')
 
 thisDriver:run()

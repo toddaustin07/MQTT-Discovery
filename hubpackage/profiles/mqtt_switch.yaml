@@ -19,3 +19,21 @@ preferences:
       minLength: 6
       maxLength: 32
       default: "xxxxx/xxxxx"
+  - title: "Command Message QoS"
+    name: cmdqos
+    description: "Quality of Service"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        qos0: "0"
+        qos1: "1"
+        qos2: "2"
+      default: qos1
+  - title: "Command Message Retention"
+    name: retain
+    description: "Retain Messages"
+    required: true
+    preferenceType: boolean
+    definition:
+     default: false
