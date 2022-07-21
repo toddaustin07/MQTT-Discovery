@@ -80,4 +80,4 @@ The message value must be one of the valid values that SmartThings expects for t
 - contact (contactSensor): open | closed
 - presence (presenceSensor): present | not present
 - alarm: off | siren | strobe | both
-- value: open | closed
+- valve: open | closed
