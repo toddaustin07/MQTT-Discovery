@@ -28,13 +28,13 @@ local log = require "log"
 
 local mqtt = require "mqtt"
 
-
--- Module variables
+-- Global variables
 thisDriver = {}
 
 client = nil
 client_reset_inprogress = false
 
+-- Module variables
 local config_initialized = false
 
 local TOPIC_PREFIX = 'smartthings'
@@ -277,8 +277,6 @@ local function create_MQTT_client(device)
   local connect_args = {}
   connect_args.uri = device.preferences.broker
   connect_args.clean = true
-  connect_args.driver = thisDriver
-  connect_args.device = device
   
   if device.preferences.userid ~= '' and device.preferences.password ~= '' then
     if device.preferences.userid ~= 'xxxxx' and device.preferences.password ~= 'xxxxx' then
