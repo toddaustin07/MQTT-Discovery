@@ -74,7 +74,10 @@ mosquitto_pub -h localhost -t “smartthings/switch/myswitch/state” -m “off�
 
 The message value must be one of the valid values that SmartThings expects for the specific device capability:
 - switch, light, plug (switch): on | off
+- level: 0-100
 - momentary: pushed | held | double | pushed_x2 | pushed_x3
 - motion (motionSensor): active | inactive
 - contact (contactSensor): open | closed
 - presence (presenceSensor): present | not present
+- alarm: off | siren | strobe | both
+- valve: open | closed
