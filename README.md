@@ -6,7 +6,7 @@ This driver is provides a general-purpose way to create and update basic SmartTh
 ### Supported Device Types
 The following device types are currently supported, but more can easily be added at community's request:
 ```
-switch, level, momentary, light, plug, motion, contact, presence, alarm, valve
+switch, level, momentary, light, plug, motion, contact, presence, alarm, valve, moisture
 ```
 ### Caveats
 - Testing has been limited so far, and only with Mosquitto MQTT broker
@@ -43,7 +43,7 @@ SmartThings device creation and capability attribute (state) updates are achieve
 where:
 
 - ‘**smartthings**’ is mandatory topic prefix
-- *type* is device type (currently: switch | level | light | plug | momentary | motion | contact | presence | alarm | valve)
+- *type* is device type (currently: switch | level | light | plug | momentary | motion | contact | presence | alarm | valve | moisture)
 - *nodename* is an optional name identifying the source node \[a-zA-Z0-9_\]; no other special characters or spaces
 - *uniquename* is a unique identifying name for the device; \[a-zA-Z0-9_\]; no other special characters or spaces
 - ‘**config**’ indicates device creation, ‘**state**’ indicates device capability attribute update
@@ -81,3 +81,4 @@ The message value must be one of the valid values that SmartThings expects for t
 - presence (presenceSensor): present | not present
 - alarm: off | siren | strobe | both
 - valve: open | closed
+- moisture: 0-100
