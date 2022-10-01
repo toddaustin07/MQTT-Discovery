@@ -1,0 +1,39 @@
+name: mqttmoisture.v1
+components:
+- id: main
+  capabilities:
+    - id: relativeHumidityMeasurement
+      version: 1
+  categories:
+    - name: LeakSensor
+metadata:
+  ocfDeviceType: x.com.st.d.sensor.moisture
+preferences:
+  - title: "Command Topic"
+    name: cmdTopic
+    description: "Topic String"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: text
+      minLength: 6
+      maxLength: 32
+      default: "xxxxx/xxxxx"
+  - title: "Command Message QoS"
+    name: cmdqos
+    description: "Quality of Service"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        qos0: "0"
+        qos1: "1"
+        qos2: "2"
+      default: qos1
+  - title: "Command Message Retention"
+    name: retain
+    description: "Retain Messages"
+    required: true
+    preferenceType: boolean
+    definition:
+     default: false

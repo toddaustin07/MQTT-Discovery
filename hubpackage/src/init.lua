@@ -83,6 +83,7 @@ local profiles =  {
                     ['level']          = 'mqttlevel.v1',
                     ['dimmer']         = 'mqttlevel.v1',
                     ['valve']          = 'mqttvalve.v1',
+										['moisture']       = 'mqttmoisture.v1',
                   }
 
 
@@ -224,6 +225,12 @@ local function proc_state(topic, state)
     elseif topic.cap == 'valve' then
       if validate_state(capabilities.valve.valve, state) then
         device:emit_event(capabilities.valve.valve(state))
+      end
+
+    elseif topic.cap == 'moisture' then
+      local moisture = tonumber(state)
+      if moisture then
+        device:emit_event(capabilities.relativeHumidityMeasurement.humidity(moisture))
       end
       
     else
@@ -566,6 +573,8 @@ local function device_added (driver, device)
         device:emit_event(capabilities.switchLevel.level(0))
       elseif cap.id == 'valve' then
         device:emit_event(capabilities.valve.valve('closed'))
+			elseif cap.id == 'relativeHumidityMeasurement' then
+        device:emit_event(capabilities.relativeHumidityMeasurement.humidity(0))
       end
       
     end
@@ -703,6 +712,6 @@ thisDriver = Driver("thisDriver", {
   }
 })
 
-log.info ('MQTT Device Handler V1.1 Started!!!')
+log.info ('MQTT Device Handler V1.2 Started!!!')
 
 thisDriver:run()
