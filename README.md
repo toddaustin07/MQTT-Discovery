@@ -1,7 +1,7 @@
 # MQTT-Discovery
 A SmartThings Edge version of Home Assistant's MQTT Discovery feature
 
-This driver is provides a general-purpose way to create and update basic SmartThings devices via MQTT messages. These messages can be initiated through configurable MQTT-enabled applications, or custom applications or scripts running on your home network. It is easy to set up, and requires no programming expertise to implement.
+This driver provides a general-purpose way to create and update basic SmartThings devices via MQTT messages. These messages can be initiated through configurable MQTT-enabled applications, or custom applications or scripts running on your home network. It is easy to set up, and requires no programming expertise to implement.
 
 ### Supported Device Types
 The following device types are currently supported, but more can easily be added at community's request:
